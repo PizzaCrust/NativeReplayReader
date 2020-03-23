@@ -61,9 +61,35 @@ data class Player(var Id: Int,
                   var DeathTags: List<String>?,
                   var DeathLocation: Map<String, Double>?)
 
+data class KillFeedEntry(var PlayerId: Int,
+                         var PlayerName: String?,
+                         var PlayerIsBot: Boolean,
+                         var FinisherOrDowner: Int,
+                         var FinisherOrDownerName: String,
+                         var FinisherOrDownerIsBot: Boolean,
+                         var ReplicatedWorldTimeSeconds: Double,
+                         var Distance: Double,
+                         var DeathCause: Int,
+                         var DeathLocation: Map<String, Double>,
+                         var DeathTags: List<String>,
+                         var IsDowned: Boolean,
+                         var IsRevived: Boolean)
+
 data class Replay(var Eliminations: List<Elimination>,
                   var Stats: GameStats,
                   var TeamStats: TeamStats,
                   var GameData: GameData,
                   var TeamData: List<Team>,
-                  var PlayerData: List<Player>)
+                  var PlayerData: List<Player>,
+                  var KillFeed: List<KillFeedEntry>) {
+
+    fun getPlayer(id: Int): Player? {
+        for (playerDatum in PlayerData) {
+            if (playerDatum.Id == id) {
+                return playerDatum
+            }
+        }
+        return null
+    }
+
+}
