@@ -55,7 +55,7 @@ class NativeRunner {
             throw UnsupportedOperationException("File doesn't exist")
         }
         return threadPool.submit {
-            val cmd = "${client.absolutePath} ${replayFile.absolutePath}"
+            val cmd = "${client.absolutePath} \"${replayFile.absolutePath}\""
             val out = ByteArrayOutputStream()
             val exec = DefaultExecutor()
             exec.streamHandler = PumpStreamHandler(out)

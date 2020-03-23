@@ -35,7 +35,35 @@ data class GameData(var GameSessionId: String,
                     var WinningTeam: Int?,
                     var WinningPlayerIds: List<Int>?)
 
+data class Team(var TeamIndex: Int, var PlayerIds: List<Int>, var PlayerNames: List<String>,
+                var PartyOwnerId: Int?, var Placement: Int)
+
+// Henchman AI do not have Bot ID & has player name custom override, Player AI have bot ID
+data class Player(var Id: Int,
+                  var PlayerId: String?,
+                  var EpicId: String?,
+                  var BotId: String?,
+                  var IsBot: Boolean?, // either true or null
+                  var PlayerNameCustomOverride: String?, // only henchman
+                  var Platform: String?,
+                  var Level: Int?,
+                  var SeasonLevelUIDisplay: Int?,
+                  var TeamIndex: Int,
+                  var IsPartyLeader: Boolean,
+                  var IsReplayOwner: Boolean,
+                  var HasFinishedLoading: Boolean?,
+                  var HasStartedPlaying: Boolean?,
+                  var HasThankedBusDriver: Boolean?, // either true or null
+                  var Placement: Int,
+                  var Kills: Int?,
+                  var TeamKills: Int?,
+                  var DeathCause: Int?,
+                  var DeathTags: List<String>?,
+                  var DeathLocation: Map<String, Double>?)
+
 data class Replay(var Eliminations: List<Elimination>,
                   var Stats: GameStats,
                   var TeamStats: TeamStats,
-                  var GameData: GameData)
+                  var GameData: GameData,
+                  var TeamData: List<Team>,
+                  var PlayerData: List<Player>)
