@@ -15,7 +15,7 @@ import kotlin.system.exitProcess
 
 fun main() {
     val runner = NativeRunner()
-    runner.processReplay(File("special.replay")) {
+    runner.processReplay(File("duo 2.replay")) {
         println(this)
     }.get()
     exitProcess(0)
