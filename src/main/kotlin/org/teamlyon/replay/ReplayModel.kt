@@ -36,7 +36,7 @@ data class GameData(var GameSessionId: String,
                     var WinningPlayerIds: List<Int>?)
 
 data class Team(var TeamIndex: Int, var PlayerIds: List<Int>, var PlayerNames: List<String>,
-                var PartyOwnerId: Int?, var Placement: Int)
+                var PartyOwnerId: Int?, var Placement: Int?)
 
 // Henchman AI do not have Bot ID & has player name custom override, Player AI have bot ID
 data class Player(var Id: Int,
