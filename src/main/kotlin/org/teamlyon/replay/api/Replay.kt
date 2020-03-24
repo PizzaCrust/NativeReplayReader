@@ -49,6 +49,15 @@ interface Replay {
         return null
     }
 
+    fun teamFromId(int: Int): RTeam? {
+        for (team in this.teams) {
+            if (team.id == int) {
+                return team
+            }
+        }
+        return null
+    }
+
     /**
      * Represents human players
      */

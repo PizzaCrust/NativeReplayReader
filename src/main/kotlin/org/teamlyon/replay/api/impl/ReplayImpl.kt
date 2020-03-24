@@ -18,10 +18,13 @@ fun main() {
 }
 
 fun org.teamlyon.replay.Replay.toApi(): Replay {
+    if (GameData.WinningTeam != null) {
+        return CompleteReplayImpl(this)
+    }
     return ReplayImpl(this)
 }
 
-private class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay {
+private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay {
     override val handle: Any
         get() = h
     override val complete: Boolean
@@ -100,4 +103,11 @@ private class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay {
         get() = h.GameData.AircraftStartTime
     override val safeZoneStartTime: Double
         get() = h.GameData.SafeZoneStartTime
+}
+
+private class CompleteReplayImpl(private val h: org.teamlyon.replay.Replay): CompleteReplay,
+        ReplayImpl(h) {
+    override val winningTeam: RTeam
+        get() = this.teamFromId(h.GameData.WinningTeam!!)!!
+
 }
