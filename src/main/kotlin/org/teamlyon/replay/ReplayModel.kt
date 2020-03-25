@@ -54,7 +54,7 @@ data class Player(var Id: Int,
                   var HasFinishedLoading: Boolean?,
                   var HasStartedPlaying: Boolean?,
                   var HasThankedBusDriver: Boolean?, // either true or null
-                  var Placement: Int,
+                  var Placement: Int?,
                   var Kills: Int?,
                   var TeamKills: Int?,
                   var DeathCause: Int?,

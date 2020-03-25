@@ -44,4 +44,10 @@ interface RTeam {
      */
     val replay: Replay
 
+    /**
+     *
+     * Represents the time of last death on this team. If the team is still alive, it will be null.
+     */
+    val timeOfDeath: Long?
+
 }

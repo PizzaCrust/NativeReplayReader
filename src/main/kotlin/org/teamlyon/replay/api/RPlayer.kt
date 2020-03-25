@@ -64,7 +64,7 @@ interface RPlayer {
 
     /**
      * Represents the player's death. Can be null if he didn't die at the latest state of the
-     * recorder.
+     * recorder. (however, is not reliable)
      */
     val death: DeathInfo?
 
@@ -82,6 +82,11 @@ interface RPlayer {
      * Represents the replay that this object is responsible to
      */
     val replay: Replay
+
+    /**
+     * Represents the placement, can be null if replay cant compute placement
+     */
+    val placement: Int?
 
 }
 
@@ -111,6 +116,12 @@ interface RHumanPlayer: RPlayer {
      * Represents the killer of the player
      */
     val killer: RPlayer?
+
+    /**
+     * Represents the time of death of the player. Will be null if replay doesn't have or if the
+     * player didn't die.
+     */
+    val timeOfDeath: Long?
 
 }
 

@@ -35,6 +35,9 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
         get() {
             val list = mutableListOf<Elimination>()
             for (elim in r.eliminations) {
+                if (elim.killer.id == elim.victim.id) {
+                    continue
+                }
                 if (!elim.knocked && !elim.victim.bot && elim.killer.id == id) {
                     list.add(elim)
                 }
@@ -45,6 +48,10 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
         get() = handleObj.IsBot != null && handleObj.IsBot!!
     override val replay: Replay
         get() = r
+    override val placement: Int?
+        get() {
+            return handleObj.Placement
+        }
 }
 
 fun fromHandle(obj: Player, r: Replay): RPlayer {
@@ -70,17 +77,31 @@ private class HumanPlayerImpl(handleObj: Player, r: Replay): RHumanPlayer, Playe
         get() = handleObj.Platform!!
     override val level: Int
         get() = handleObj.Level!!
-    override val killer: RPlayer?
+
+    val deathElimination: Elimination? // latest death
         get() {
-            var killer: RPlayer? = null
+            var death: Elimination? = null
             for (elimination in this.replay.eliminations) {
                 if (elimination.victim is RHumanPlayer) {
+                    // suicides
+                    if (elimination.killer.id == elimination.victim.id) {
+                        continue
+                    }
                     if (elimination.victim.epicId == this.epicId) {
-                        killer =  elimination.killer
+                        death = elimination
                     }
                 }
             }
-            return killer
+            return death
+        }
+
+    override val killer: RPlayer?
+        get() {
+            return deathElimination?.killer
+        }
+    override val timeOfDeath: Long?
+        get() {
+            return deathElimination?.time
         }
 }
 

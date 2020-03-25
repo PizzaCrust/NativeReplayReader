@@ -56,5 +56,31 @@ class TeamImpl(private val obj: Team, private val r: Replay): RTeam {
         }
     override val replay: Replay
         get() = r
+    override val timeOfDeath: Long?
+        get() {
+            var latestTime: Long? = null
+            var win = false
+            for (humanPlayer in humanPlayers) {
+                if (humanPlayer.placement != null) {
+                    if (humanPlayer.placement!! == 1) {
+                        win = true
+                    }
+                }
+                var death = 0L
+                if (humanPlayer.timeOfDeath != null) {
+                    death = humanPlayer.timeOfDeath!!
+                }
+                if (latestTime == null) {
+                    latestTime = death
+                } else if (latestTime < death) {
+                    latestTime = death
+                }
+            }
+            return if (!win) {
+                latestTime
+            } else {
+                null
+            }
+        }
 
 }
