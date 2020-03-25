@@ -97,6 +97,11 @@ interface Replay {
      */
     val safeZoneStartTime: Double
 
+    /**
+     * Represents the replay owner
+     */
+    val replayOwner: RHumanPlayer
+
 }
 
 /**

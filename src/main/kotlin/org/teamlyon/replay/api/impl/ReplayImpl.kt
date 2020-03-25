@@ -3,11 +3,21 @@ package org.teamlyon.replay.api.impl
 import org.teamlyon.replay.NativeRunner
 import org.teamlyon.replay.api.*
 import java.io.File
+import java.lang.UnsupportedOperationException
 import kotlin.system.exitProcess
 
 fun main() {
     NativeRunner().processReplay(File("duo 2.replay")) {
         val api = toApi()
+        println("complete: ${api.complete}")
+        println(api.javaClass.simpleName)
+        val owner = api.replayOwner
+        println(owner.epicId)
+        println((owner.killer!! as RHumanPlayer).epicId)
+        println(owner.killer!!.team)
+        for (humanPlayer in (api as CompleteReplay).winningTeam.humanPlayers) {
+            println("team detected, ${humanPlayer.epicId}")
+        }
         for (player in api.players) {
             if (player is RHumanPlayer) {
                 println("${player.epicId} killed ${player.kills.size} players")
@@ -103,6 +113,15 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
         get() = h.GameData.AircraftStartTime
     override val safeZoneStartTime: Double
         get() = h.GameData.SafeZoneStartTime
+    override val replayOwner: RHumanPlayer
+        get() {
+            for (player in this.players) {
+                if (player.replayOwner) {
+                    return player as RHumanPlayer
+                }
+            }
+            throw UnsupportedOperationException("No owner")
+        }
 }
 
 private class CompleteReplayImpl(private val h: org.teamlyon.replay.Replay): CompleteReplay,

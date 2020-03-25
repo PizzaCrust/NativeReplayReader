@@ -107,6 +107,11 @@ interface RHumanPlayer: RPlayer {
      */
     val level: Int
 
+    /**
+     * Represents the killer of the player
+     */
+    val killer: RPlayer?
+
 }
 
 /**

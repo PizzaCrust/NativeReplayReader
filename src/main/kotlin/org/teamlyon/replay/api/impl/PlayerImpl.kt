@@ -70,6 +70,18 @@ private class HumanPlayerImpl(handleObj: Player, r: Replay): RHumanPlayer, Playe
         get() = handleObj.Platform!!
     override val level: Int
         get() = handleObj.Level!!
+    override val killer: RPlayer?
+        get() {
+            var killer: RPlayer? = null
+            for (elimination in this.replay.eliminations) {
+                if (elimination.victim is RHumanPlayer) {
+                    if (elimination.victim.epicId == this.epicId) {
+                        killer =  elimination.killer
+                    }
+                }
+            }
+            return killer
+        }
 }
 
 private class PlayerAIImpl(handleObj: Player, r: Replay): RPlayerBot, PlayerImpl(handleObj, r) {
