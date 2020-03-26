@@ -63,9 +63,7 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
         get() {
             val teams = mutableListOf<RTeam>()
             for (teamDatum in h.TeamData) {
-                if (teamDatum.Placement != null) {
-                    teams.add(TeamImpl(teamDatum, this))
-                }
+                teams.add(TeamImpl(teamDatum, this))
             }
             teams.sortBy { it.placement }
             return teams
