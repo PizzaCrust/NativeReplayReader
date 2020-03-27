@@ -38,6 +38,21 @@ interface Replay {
         return null
     }
 
+    fun playerFromStringId(str: String): RPlayer? {
+        val human = playerFromEpicId(str)
+        if (human != null) {
+            return human
+        }
+        for (player in this.players) {
+            if (player is RPlayerBot) {
+                if (player.botId == str) {
+                    return player
+                }
+            }
+        }
+        return null
+    }
+
     fun playerFromEpicId(str: String): RHumanPlayer? {
         for (player in this.players) {
             if (player is RHumanPlayer) {

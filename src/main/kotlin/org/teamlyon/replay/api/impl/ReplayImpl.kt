@@ -7,14 +7,19 @@ import java.lang.UnsupportedOperationException
 import kotlin.system.exitProcess
 
 fun main() {
-    NativeRunner().processReplay(File("duo 2.replay")) {
+    NativeRunner().processReplay(File("solo win.replay")) {
         val api = toApi()
         println("complete: ${api.complete}")
         println(api.javaClass.simpleName)
         val owner = api.replayOwner
         println(owner.epicId)
-        println((owner.killer!! as RHumanPlayer).epicId)
-        println(owner.killer!!.team)
+        for (player in api.players) {
+            if (player is RHumanPlayer) {
+                println(player.epicId)
+            }
+        }
+        //println((owner.killer!! as RHumanPlayer).epicId)
+        //println(owner.killer!!.team)
         /*
         for (humanPlayer in (api as CompleteReplay).winningTeam.humanPlayers) {
             println("team detected, ${humanPlayer.epicId}")
@@ -30,6 +35,7 @@ fun main() {
             }
         }
          */
+        /*
         api.teams.forEachIndexed { index, team ->
             if (!team.botTeam) {
                 print("$index. ")
@@ -39,6 +45,7 @@ fun main() {
                 print("(team kills: ${team.kills.size})\n")
             }
         }
+         */
     }.get()
     exitProcess(0)
 }
@@ -113,8 +120,8 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
                 }
                 kills.add(
                         Elimination(
-                                playerFromEpicId(elimination.Eliminator.toLowerCase())!!,
-                                playerFromEpicId(elimination.Eliminated.toLowerCase())!!,
+                                playerFromStringId(elimination.Eliminator.toLowerCase())!!,
+                                playerFromStringId(elimination.Eliminated.toLowerCase())!!,
                                 elimination.GunType,
                                 elimination.Knocked,
                                 convertTimeString(elimination.Time)

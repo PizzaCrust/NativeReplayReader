@@ -107,7 +107,7 @@ private class HumanPlayerImpl(handleObj: Player, r: Replay): RHumanPlayer, Playe
 
 private class PlayerAIImpl(handleObj: Player, r: Replay): RPlayerBot, PlayerImpl(handleObj, r) {
     override val botId: String
-        get() = handleObj.BotId!!
+        get() = handleObj.BotId!!.toLowerCase()
 }
 
 private class NPCAIImpl(handleObj: Player, r: Replay): RHenchmanBot, PlayerImpl(handleObj, r) {
