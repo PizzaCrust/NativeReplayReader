@@ -117,6 +117,16 @@ interface Replay {
      */
     val replayOwner: RHumanPlayer
 
+    /**
+     * Whether this replay is from a custom or not.
+     */
+    val custom: Boolean
+
+    /**
+     * The custom key that was used to queue into the game and record.
+     */
+    val customKey: String?
+
 }
 
 /**

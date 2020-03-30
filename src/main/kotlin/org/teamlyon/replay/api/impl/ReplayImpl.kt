@@ -153,6 +153,15 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
             }
             throw UnsupportedOperationException("No owner")
         }
+    override val custom: Boolean
+        get() = sessionId.contains("|")
+    override val customKey: String?
+        get() {
+            if (custom) {
+                return sessionId.split("|")[0]
+            }
+            return null
+        }
 }
 
 private class CompleteReplayImpl(private val h: org.teamlyon.replay.Replay): CompleteReplay,
