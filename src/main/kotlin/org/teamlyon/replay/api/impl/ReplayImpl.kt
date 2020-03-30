@@ -7,10 +7,11 @@ import java.lang.UnsupportedOperationException
 import kotlin.system.exitProcess
 
 fun main() {
-    NativeRunner().processReplay(File("solo win.replay")) {
+    NativeRunner().processReplay(File("custom.replay")) {
         val api = toApi()
         println("complete: ${api.complete}")
         println(api.javaClass.simpleName)
+        println(api.customKey)
         val owner = api.replayOwner
         println(owner.epicId)
         for (player in api.players) {
@@ -154,11 +155,11 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
             throw UnsupportedOperationException("No owner")
         }
     override val custom: Boolean
-        get() = sessionId.contains("|")
+        get() = sessionId.contains("CK-")
     override val customKey: String?
         get() {
             if (custom) {
-                return sessionId.split("|")[0]
+                return sessionId.split("K-")[1].split("|")[0]
             }
             return null
         }
