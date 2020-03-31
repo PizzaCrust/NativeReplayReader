@@ -143,10 +143,10 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
     override val playlist: String
         get() {
             val current = h.GameData.CurrentPlaylist
-            if (current == null) {
-                return "Recorded not party leader"
+            return if (current == null) {
+                "Recorder not party leader"
             } else {
-                return current
+                current
             }
         }
     override val playlistLevels: List<String>
