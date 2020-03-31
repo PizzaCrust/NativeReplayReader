@@ -11,6 +11,8 @@ fun main() {
         val api = toApi()
         println("complete: ${api.complete}")
         println(api.javaClass.simpleName)
+        println(GameData.GameSessionId)
+        println(api.sessionId)
         println(api.customKey)
         val owner = api.replayOwner
         println(owner.epicId)
@@ -64,7 +66,13 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
     override val complete: Boolean
         get() = h.GameData.WinningTeam != null
     override val sessionId: String
-        get() = h.GameData.GameSessionId
+        get() {
+            val sess = h.GameData.GameSessionId
+            if (sess.contains("CK-")) {
+                return sess.split("|")[1]
+            }
+            return sess
+        }
     override val matchStartedTimestamp: String
         get() = h.GameData.UtcTimeStartedMatch
     override val teams: List<RTeam>
@@ -155,11 +163,11 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
             throw UnsupportedOperationException("No owner")
         }
     override val custom: Boolean
-        get() = sessionId.contains("CK-")
+        get() = h.GameData.GameSessionId.contains("CK-")
     override val customKey: String?
         get() {
             if (custom) {
-                return sessionId.split("K-")[1].split("|")[0]
+                return h.GameData.GameSessionId.split("K-")[1].split("|")[0]
             }
             return null
         }
