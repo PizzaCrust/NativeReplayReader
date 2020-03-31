@@ -24,7 +24,7 @@ data class TeamStats(var Position: Int,
 
 data class GameData(var GameSessionId: String,
                     var UtcTimeStartedMatch: String,
-                    var CurrentPlaylist: String,
+                    var CurrentPlaylist: String?,
                     var AdditionalPlaylistLevels: List<String>,
                     var ActiveGameplayModifiers: List<String>,
                     var TeamCount: Int,

@@ -12,6 +12,7 @@ fun main() {
         println("complete: ${api.complete}")
         println(api.javaClass.simpleName)
         println(GameData.GameSessionId)
+        println(GameData.CurrentPlaylist)
         println(api.sessionId)
         println(api.customKey)
         val owner = api.replayOwner
@@ -140,7 +141,14 @@ private open class ReplayImpl(private val h: org.teamlyon.replay.Replay): Replay
             return kills
         }
     override val playlist: String
-        get() = h.GameData.CurrentPlaylist
+        get() {
+            val current = h.GameData.CurrentPlaylist
+            if (current == null) {
+                return "Recorded not party leader"
+            } else {
+                return current
+            }
+        }
     override val playlistLevels: List<String>
         get() = h.GameData.AdditionalPlaylistLevels
     override val gameplayModifiers: List<String>
