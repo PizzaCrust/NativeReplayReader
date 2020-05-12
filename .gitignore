@@ -10,7 +10,8 @@
 ### Default template
 /*
 !/src
-!build.gradle
+!build.gradle.kts
+!settings.gradle.kts
 !/gradle
 !gradlew
 !gradlew.bat
