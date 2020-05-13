@@ -18,6 +18,12 @@
     <Reference Include="Unreal.Core">
       <HintPath>..\FortniteReplayDecompressor\src\FortniteReplayReader\bin\Debug\netcoreapp3.1\Unreal.Core.dll</HintPath>
     </Reference>
+    <Reference Include="OozSharp">
+        <HintPath>..\FortniteReplayDecompressor\src\FortniteReplayReader\bin\Debug\netcoreapp3.1\OozSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Unreal.Encryption">
+        <HintPath>..\FortniteReplayDecompressor\src\Unreal.Encryption\bin\Debug\netcoreapp3.1\Unreal.Encryption.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -11,6 +11,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Unreal.Core\Unreal.Core.csproj" />
+    <ProjectReference Include="..\Unreal.Encryption\Unreal.Encryption.csproj" />
+    <ProjectReference Include="..\OozSharp\OozSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contracts\" />
