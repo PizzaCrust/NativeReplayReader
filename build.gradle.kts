@@ -12,4 +12,5 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("commons-io:commons-io:2.6")
     implementation("com.google.code.gson:gson:2.8.6")
+    compileOnly("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
 }
