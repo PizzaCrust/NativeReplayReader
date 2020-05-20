@@ -6,7 +6,6 @@ import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.Git
 import org.teamlyon.replay.NativeRunner
 import java.io.File
-import java.net.URL
 
 private fun File.exec(cmd: String) {
     val exec = DefaultExecutor()

@@ -2,7 +2,6 @@ package org.teamlyon.replay.api.impl
 
 import org.teamlyon.replay.Player
 import org.teamlyon.replay.api.*
-import java.lang.UnsupportedOperationException
 
 private open class PlayerImpl(protected val handleObj: Player, private val r: Replay): RPlayer {
     override val handle: Any

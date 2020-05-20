@@ -1,5 +1,10 @@
 package org.teamlyon.replay.api
 
+import org.teamlyon.replay.api.Elimination
+import org.teamlyon.replay.api.RHumanPlayer
+import org.teamlyon.replay.api.RPlayer
+import org.teamlyon.replay.api.Replay
+
 interface RTeam {
 
     val handle: Any

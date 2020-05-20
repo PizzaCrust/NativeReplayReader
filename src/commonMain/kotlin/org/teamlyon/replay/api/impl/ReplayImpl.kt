@@ -1,58 +1,6 @@
 package org.teamlyon.replay.api.impl
 
-import org.teamlyon.replay.NativeRunner
 import org.teamlyon.replay.api.*
-import java.io.File
-import java.lang.UnsupportedOperationException
-import kotlin.system.exitProcess
-
-fun main() {
-    NativeRunner().processReplay(File("custom.replay")) {
-        val api = toApi()
-        println("complete: ${api.complete}")
-        println(api.javaClass.simpleName)
-        println(GameData.GameSessionId)
-        println(GameData.CurrentPlaylist)
-        println(api.sessionId)
-        println(api.customKey)
-        val owner = api.replayOwner
-        println(owner.epicId)
-        for (player in api.players) {
-            if (player is RHumanPlayer) {
-                println(player.epicId)
-            }
-        }
-        //println((owner.killer!! as RHumanPlayer).epicId)
-        //println(owner.killer!!.team)
-        /*
-        for (humanPlayer in (api as CompleteReplay).winningTeam.humanPlayers) {
-            println("team detected, ${humanPlayer.epicId}")
-        }
-        for (player in api.players) {
-            if (player is RHumanPlayer) {
-                println("${player.epicId} killed ${player.kills.size} players")
-                println("The killer died at ${player.timeOfDeath} with placement ${player.placement}")
-                println("Team had ${player.team.kills.size} and died at ${player.team.timeOfDeath}")
-                for (humanPlayer in player.team.humanPlayers) {
-                    println(" - died at ${humanPlayer.timeOfDeath}")
-                }
-            }
-        }
-         */
-        /*
-        api.teams.forEachIndexed { index, team ->
-            if (!team.botTeam) {
-                print("$index. ")
-                for (humanPlayer in team.humanPlayers) {
-                    print(humanPlayer.epicId + " ")
-                }
-                print("(team kills: ${team.kills.size})\n")
-            }
-        }
-         */
-    }.get()
-    exitProcess(0)
-}
 
 fun org.teamlyon.replay.Replay.toApi(): Replay {
     if (GameData.WinningTeam != null) {
