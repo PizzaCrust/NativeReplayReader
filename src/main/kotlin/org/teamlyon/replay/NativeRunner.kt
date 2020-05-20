@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -37,13 +38,23 @@ class NativeRunner {
 
 
     init {
-        if (!SystemUtils.IS_OS_LINUX && !SystemUtils.IS_OS_WINDOWS) {
+        if (!SystemUtils.IS_OS_LINUX && !SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_MAC_OSX) {
             throw UnsupportedOperationException("Invalid os")
         }
         if (SystemUtils.IS_OS_WINDOWS) {
             client = extractFile("windows-client.exe")
         } else {
-            client = extractFile("linux-client")
+            client = when {
+                SystemUtils.IS_OS_MAC_OSX -> {
+                    extractFile("mac-client")
+                }
+                SystemUtils.IS_OS_LINUX -> {
+                    extractFile("linux-client")
+                }
+                else -> {
+                    throw RuntimeException("Unsupported operating system")
+                }
+            }
             DefaultExecutor().execute(CommandLine.parse("chmod 777 ${client.absolutePath}"))
         }
     }
