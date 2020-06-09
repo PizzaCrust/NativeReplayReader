@@ -4,8 +4,6 @@ import me.tgsc.replay.Replay.Companion.fromJson
 import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
-import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.SystemUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.UnsupportedOperationException
@@ -15,11 +13,13 @@ import kotlin.system.exitProcess
 
 fun main() {
     val runner = NativeRunner()
-    runner.processReplay(File("duo 2.replay")) {
+    runner.processReplay(File("solo win.replay")) {
         println(this)
     }.future.get()
     exitProcess(0)
 }
+
+internal val os: String = System.getProperty("os.name").toLowerCase()
 
 //todo remove all external dependencies
 class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
@@ -31,16 +31,15 @@ class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
         if (file.exists()) {
             file.delete()
         }
-        FileUtils.copyInputStreamToFile(this.javaClass.classLoader.getResourceAsStream(platform.file), file)
+        file.writeBytes(this.javaClass.classLoader.getResourceAsStream(platform.file)!!.readBytes())
         file.deleteOnExit()
         return file
     }
 
     internal enum class SupportedPlatform(val current: Boolean, extension: String = "") {
-        LINUX(SystemUtils.IS_OS_LINUX),
-        WIN(SystemUtils.IS_OS_WINDOWS, "exe"),
-        MAC(SystemUtils.IS_OS_MAC_OSX);
-
+        LINUX(os.startsWith("linux")),
+        WIN(os.startsWith("windows"), "exe"),
+        MAC(os.startsWith("Mac OS X"));
         val fileName = StringBuilder("ReplayClient").apply {
             if (extension.isNotBlank()) append(".$extension")
         }.toString()

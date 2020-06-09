@@ -29,8 +29,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation("org.apache.commons:commons-exec:1.3")
-                implementation("org.apache.commons:commons-lang3:3.9")
-                implementation("commons-io:commons-io:2.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
             }
         }
