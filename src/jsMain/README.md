@@ -4,10 +4,14 @@ This is the implementation of NRR for Node. This wraps a client based on
   platforms.
 
 ## NPM
+The clients are included already in the NPM package, and the package can be used as is.
 https://www.npmjs.com/package/nativereplayreader
 
 ## Kotlin projects
-You can use this in your own kotlin/js node projects.
+You can use this in your own kotlin/js node projects. However, ensure that you have the clients
+ in your own project. Place the /clients folder with linux, mac, win clients in the build/js
+ /packages/yourpackagename in a folder named /clients with all the clients. Otherwise, there will
+  be no clients resulting in blank json error.
 ```
 repositories {
     mavenCentral()
