@@ -71,22 +71,3 @@ fun build(root: File) {
     replayClient.build("osx-x64").move(File(targetBuild, "mac"))
     tmp.deleteAll()
 }
-
-private fun File.recursiveList(): List<File> {
-    val files = mutableListOf<File>()
-    this.listFiles()?.forEach {
-        if (it.isDirectory) files.addAll(it.recursiveList())
-        files.add(it)
-    }
-    return files
-}
-
-fun copyContents(srcDir: File, destDir: File) {
-    srcDir.recursiveList().forEach {
-        val localPath = it.absolutePath.replace(srcDir.absolutePath, "")
-        val newFile = File(File(destDir, "clients"), localPath).apply {
-            if (!exists()) this.parentFile.mkdirs()
-        }
-        if (!it.isDirectory) newFile.writeBytes(it.readBytes())
-    }
-}

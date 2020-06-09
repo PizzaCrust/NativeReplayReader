@@ -1,9 +1,19 @@
 package me.tgsc.replay
 
+import FileSystem
 import currentDirPath
+import download
 import kotlin.js.Promise
 
-val clientsPath = "${Path.dirname(currentDirPath)}/clients"
+//val clientsPath = "${Path.dirname(currentDirPath)}/clients"
+
+/*
+fun main() {
+    JsRunner().processReplay("${Process.cwd()}/solo win.replay") {
+        println(this)
+    }
+}
+ */
 
 class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
 
@@ -31,7 +41,7 @@ class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
             if (extension.isNotBlank()) append(".$extension")
         }.toString()
 
-        val file = "$clientsPath/${name.toLowerCase()}/$fileName"
+        val file = "https://github.com/PizzaCrust/NativeReplayReader/raw/master/src/commonMain/resources/${name.toLowerCase()}/$fileName"
 
         companion object {
             val currentPlatform = values().firstOrNull { it.current }
@@ -42,28 +52,50 @@ class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
         if (SupportedPlatform.currentPlatform == null) throw UnsupportedOperationException("OS not supported")
     }
 
+    private fun execReplayClient(replayClientPath: String,
+                                 inputResource: String,
+                                 parseMode: ReplayParser.ParseMode,
+                                 block: Replay.() -> Unit,
+                                 resolve: (Replay) -> Unit,
+                                 reject: (Throwable) -> Unit) {
+        println("Parsing replay")
+        ChildProcess.exec("$replayClientPath \"$inputResource\" " +
+                parseMode.name) { _, stdout, _ ->
+            try {
+                val str = StringBuilder().apply {
+                    stdout.split("\n").toMutableList().apply {
+                        println(this[0])
+                        removeAt(0)
+                    }.forEach {
+                        append(it).append("\n")
+                    }
+                }.toString()
+                Replay.fromJson(str).apply {
+                    block(this)
+                    resolve(this)
+                }
+            } catch (e: Exception) {
+                reject(e)
+            }
+        }
+    }
+
     // in js the files should be chmodded already i hvaent done this yet
     override fun processReplay(inputResource: String, parseMode: ReplayParser.ParseMode, block: Replay.() -> Unit): PromiseTicket {
         if (!FileSystem.existsSync(inputResource)) throw UnsupportedOperationException("File doesn't exist")
+        val replayClientPath = "${Process.cwd()}/${SupportedPlatform.currentPlatform!!.fileName}"
         return PromiseTicket(Promise { resolve, reject ->
-            ChildProcess.exec("${SupportedPlatform.currentPlatform!!.file} \"$inputResource\" " +
-                    parseMode.name) { _, stdout, _ ->
-                try {
-                    val str = StringBuilder().apply {
-                        stdout.split("\n").toMutableList().apply {
-                            println(this[0])
-                            removeAt(0)
-                        }.forEach {
-                            append(it).append("\n")
-                        }
-                    }.toString()
-                    Replay.fromJson(str).apply {
-                        block(this)
-                        resolve(this)
-                    }
-                } catch (e: Exception) {
-                    reject(e)
+            if (!FileSystem.existsSync(replayClientPath)) {
+                //val stream = FileSystem.createWriteStream(replayClientPath)
+                println("Downloading respective os client")
+                download(SupportedPlatform.currentPlatform.file).then<dynamic> {
+                    println("Download finished")
+                    FileSystem.writeFileSync(replayClientPath, it)
+                    execReplayClient(replayClientPath, inputResource, parseMode, block, resolve, reject)
                 }
+            } else {
+                println("Invoking existing os client")
+                execReplayClient(replayClientPath, inputResource, parseMode, block, resolve, reject)
             }
         })
     }

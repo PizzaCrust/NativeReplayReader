@@ -1,3 +1,5 @@
+import kotlin.js.Promise
+
 @JsModule("child_process")
 @JsNonModule
 internal external object ChildProcess {
@@ -8,6 +10,7 @@ internal external object ChildProcess {
 @JsNonModule
 internal external object Process {
     val platform: String
+    fun cwd(): String
 }
 
 @JsName("__dirname")
@@ -23,4 +26,9 @@ internal external object Path {
 @JsNonModule
 internal external object FileSystem {
     fun existsSync(path: String): Boolean
+    fun writeFileSync(path: String, buffer: dynamic)
 }
+
+@JsModule("download")
+@JsNonModule
+external fun download(url: String): Promise<dynamic>
