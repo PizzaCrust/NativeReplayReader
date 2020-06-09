@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-js"))
-    implementation("com.github.PizzaCrust.NativeReplayReader:nativereplayreader-js:68b127343e")
+    implementation("com.github.PizzaCrust.NativeReplayReader:nativereplayreader-js:4297639511")
+    implementation(npm("download", "8.0.0"))
 }
 ```

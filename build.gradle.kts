@@ -36,7 +36,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-js"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0")
-                api(npm("download", "8.0.0"))
+                implementation(npm("download", "8.0.0"))
             }
         }
     }
