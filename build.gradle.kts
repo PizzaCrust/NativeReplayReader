@@ -13,7 +13,9 @@ repositories {
 
 kotlin {
     jvm()
-    //js()
+    js {
+        nodejs {}
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -30,12 +32,10 @@ kotlin {
                 implementation("com.google.code.gson:gson:2.8.6")
             }
         }
-        /*
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
             }
         }
-         */
     }
 }

@@ -8,7 +8,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -18,11 +17,11 @@ fun main() {
     val runner = NativeRunner()
     runner.processReplay(File("duo 2.replay")) {
         println(this)
-    }.get()
+    }.future.get()
     exitProcess(0)
 }
 
-class NativeRunner {
+class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
 
     val client: File
 
@@ -63,16 +62,17 @@ class NativeRunner {
 
     private val threadPool = Executors.newCachedThreadPool()
 
-    enum class ParseMode {
-        EventsOnly, Minimal, Normal, Full, Debug, Ignore
+    class FutureTicket(val future: Future<*>): ReplayParser.Ticket {
+        override val completed
+            get() = future.isDone
     }
 
-    fun processReplay(replayFile: File, parseMode: ParseMode = ParseMode.Minimal, body: Replay.() -> Unit): Future<*> {
-        if (!replayFile.exists()) {
+    override fun processReplay(inputResource: File, parseMode: ReplayParser.ParseMode, block: Replay.() -> Unit): FutureTicket {
+        if (!inputResource.exists()) {
             throw UnsupportedOperationException("File doesn't exist")
         }
-        return threadPool.submit {
-            val cmd = "${client.absolutePath} \"${replayFile.absolutePath}\" ${parseMode.name}"
+        return FutureTicket(threadPool.submit {
+            val cmd = "${client.absolutePath} \"${inputResource.absolutePath}\" ${parseMode.name}"
             val out = ByteArrayOutputStream()
             val exec = DefaultExecutor()
             exec.streamHandler = PumpStreamHandler(out)
@@ -86,8 +86,8 @@ class NativeRunner {
                     builder.append("$s\n")
                 }
             }
-            body(Gson().fromJson(builder.toString(), Replay::class.java))
-        }
+            block(Gson().fromJson(builder.toString(), Replay::class.java))
+        })
     }
 
 }
