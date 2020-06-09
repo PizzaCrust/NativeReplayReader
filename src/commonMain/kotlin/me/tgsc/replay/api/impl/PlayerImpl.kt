@@ -24,7 +24,7 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
     override val death: DeathInfo?
         get() {
             return if (handleObj.DeathCause != null) {
-                DeathInfo(handleObj.DeathCause!!, fromMapToLoc(handleObj.DeathLocation!!),
+                DeathInfo(handleObj.DeathCause, fromMapToLoc(handleObj.DeathLocation!!),
                         handleObj.DeathTags!!)
             } else {
                 null
@@ -44,7 +44,7 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
             return list
         }
     override val bot: Boolean
-        get() = handleObj.IsBot != null && handleObj.IsBot!!
+        get() = handleObj.IsBot != null && handleObj.IsBot
     override val replay: Replay
         get() = r
     override val placement: Int?
@@ -54,7 +54,7 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
 }
 
 fun fromHandle(obj: Player, r: Replay): RPlayer {
-    return if (obj.IsBot != null && obj.IsBot!!) {
+    return if (obj.IsBot != null && obj.IsBot) {
         // henchman or player ai
         if (obj.BotId != null) {
             PlayerAIImpl(obj, r)

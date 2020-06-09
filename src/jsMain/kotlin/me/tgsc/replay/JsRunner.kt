@@ -8,7 +8,7 @@ val clientsPath = "${Path.dirname(currentDirPath)}/clients"
 fun main() {
     //println("Hello world! Current working dir: ${JsRunner.SupportedPlatform.currentPlatform?
     //.file}")
-    JsRunner().processReplay("$clientsPath/duo 2.replay") {
+    JsRunner().processReplay("$clientsPath/solo win.replay") {
         println(this)
     }
 }
@@ -50,7 +50,7 @@ class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
         if (SupportedPlatform.currentPlatform == null) throw UnsupportedOperationException("OS not supported")
     }
 
-    // in js the files should be chmodded already
+    // in js the files should be chmodded already i hvaent done this yet
     override fun processReplay(inputResource: String, parseMode: ReplayParser.ParseMode, block: Replay.() -> Unit): PromiseTicket {
         if (!FileSystem.existsSync(inputResource)) throw UnsupportedOperationException("File doesn't exist")
         return PromiseTicket(Promise { resolve, reject ->
@@ -65,7 +65,10 @@ class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
                             append(it).append("\n")
                         }
                     }.toString()
-                    resolve(Replay.fromJson(str))
+                    Replay.fromJson(str).apply {
+                        block(this)
+                        resolve(this)
+                    }
                 } catch (e: Exception) {
                     reject(e)
                 }
