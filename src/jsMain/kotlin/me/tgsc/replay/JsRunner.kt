@@ -5,14 +5,6 @@ import kotlin.js.Promise
 
 val clientsPath = "${Path.dirname(currentDirPath)}/clients"
 
-fun main() {
-    //println("Hello world! Current working dir: ${JsRunner.SupportedPlatform.currentPlatform?
-    //.file}")
-    JsRunner().processReplay("$clientsPath/solo win.replay") {
-        println(this)
-    }
-}
-
 class JsRunner: ReplayParser<String, JsRunner.PromiseTicket> {
 
     class PromiseTicket(private val promise: Promise<Replay>): ReplayParser.Ticket {
