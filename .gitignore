@@ -8,15 +8,11 @@
 ### Maven template
 # Created by .ignore support plugin (hsz.mobi)
 ### Default template
-/*
-!/src
-!build.gradle.kts
-!settings.gradle.kts
-!/gradle
-!gradlew
-!gradlew.bat
-!/pom.xml
-!/README.md
-!/LICENSE.txt
-!/.gitignore
-!/.gitignore
+/.gradle
+/.idea
+/build
+/buildSrc/.gradle
+/buildSrc/build
+/gradle
+/tmp
+/gradle.properties
