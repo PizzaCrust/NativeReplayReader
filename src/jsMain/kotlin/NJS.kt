@@ -1,26 +1,26 @@
 @JsModule("child_process")
 @JsNonModule
-external object ChildProcess {
+internal external object ChildProcess {
     fun exec(cmd: String, block: (error: dynamic, stdout: String, stderr: String) -> Unit)
 }
 
 @JsModule("process")
 @JsNonModule
-external object Process {
+internal external object Process {
     val platform: String
 }
 
 @JsName("__dirname")
-external val currentDirPath: String
+internal external val currentDirPath: String
 
 @JsModule("path")
 @JsNonModule
-external object Path {
+internal external object Path {
     fun dirname(str: String): String
 }
 
 @JsModule("fs")
 @JsNonModule
-external object FileSystem {
+internal external object FileSystem {
     fun existsSync(path: String): Boolean
 }
