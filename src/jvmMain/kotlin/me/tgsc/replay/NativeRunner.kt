@@ -1,6 +1,6 @@
 package me.tgsc.replay
 
-import com.google.gson.Gson
+import me.tgsc.replay.Replay.Companion.fromJson
 import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
@@ -21,6 +21,7 @@ fun main() {
     exitProcess(0)
 }
 
+//todo remove all external dependencies
 class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
 
     val client: File
@@ -86,7 +87,7 @@ class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
                     builder.append("$s\n")
                 }
             }
-            block(Gson().fromJson(builder.toString(), Replay::class.java))
+            block(fromJson(builder.toString()))
         })
     }
 

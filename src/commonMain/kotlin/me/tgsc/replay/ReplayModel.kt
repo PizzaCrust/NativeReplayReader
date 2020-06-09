@@ -1,87 +1,99 @@
 package me.tgsc.replay
 
-data class Elimination(var Eliminated: String,
-                       var Eliminator: String,
-                       var GunType: Int,
-                       var Time: String,
-                       var Knocked: Boolean)
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 
-data class GameStats(var Eliminations: Int,
-                     var Accuracy: Double,
-                     var Assists: Int,
-                     var WeaponDamage: Int,
-                     var OtherDamage: Int,
-                     var DamageToPlayers: Double,
-                     var Revives: Int,
-                     var DamageTaken: Int,
-                     var DamageToStructures: Int,
-                     var MaterialsGathered: Int,
-                     var MaterialsUsed: Int,
-                     var TotalTraveled: Int)
+@Serializable
+data class Elimination(val Eliminated: String,
+                       val Eliminator: String,
+                       val GunType: Int,
+                       val Time: String,
+                       val Knocked: Boolean)
 
-data class TeamStats(var Position: Int,
-                     var TotalPlayers: Int)
+@Serializable
+data class GameStats(val Eliminations: Int,
+                     val Accuracy: Double,
+                     val Assists: Int,
+                     val WeaponDamage: Int,
+                     val OtherDamage: Int,
+                     val DamageToPlayers: Double,
+                     val Revives: Int,
+                     val DamageTaken: Int,
+                     val DamageToStructures: Int,
+                     val MaterialsGathered: Int,
+                     val MaterialsUsed: Int,
+                     val TotalTraveled: Int)
+@Serializable
+data class TeamStats(val Position: Int,
+                     val TotalPlayers: Int)
 
-data class GameData(var GameSessionId: String,
-                    var UtcTimeStartedMatch: String,
-                    var CurrentPlaylist: String?,
-                    var AdditionalPlaylistLevels: List<String>,
-                    var ActiveGameplayModifiers: List<String>,
-                    var TeamCount: Int,
-                    var IsTournamentRound: Boolean,
-                    var TournamentRound: Int?,
-                    var AircraftStartTime: Double,
-                    var SafeZoneStartTime: Double,
-                    var WinningTeam: Int?,
-                    var WinningPlayerIds: List<Int>?)
+@Serializable
+data class GameData(val GameSessionId: String,
+                    val UtcTimeStartedMatch: String,
+                    val CurrentPlaylist: String?,
+                    val AdditionalPlaylistLevels: List<String>,
+                    val ActiveGameplayModifiers: List<String>,
+                    val TeamCount: Int,
+                    val IsTournamentRound: Boolean,
+                    val TournamentRound: Int?,
+                    val AircraftStartTime: Double,
+                    val SafeZoneStartTime: Double? = null,
+                    val WinningTeam: Int?,
+                    val WinningPlayerIds: List<Int>?)
 
-data class Team(var TeamIndex: Int, var PlayerIds: List<Int>, var PlayerNames: List<String>,
-                var PartyOwnerId: Int?, var Placement: Int?)
+@Serializable
+data class Team(val TeamIndex: Int, val PlayerIds: List<Int>, val PlayerNames: List<String?>,
+                val PartyOwnerId: Int?, val Placement: Int?)
 
 // Henchman AI do not have Bot ID & has player name custom override, Player AI have bot ID
-data class Player(var Id: Int,
-                  var PlayerId: String?,
-                  var EpicId: String?,
-                  var BotId: String?,
-                  var IsBot: Boolean?, // either true or null
-                  var PlayerNameCustomOverride: String?, // only henchman
-                  var Platform: String?,
-                  var Level: Int?,
-                  var SeasonLevelUIDisplay: Int?,
-                  var TeamIndex: Int,
-                  var IsPartyLeader: Boolean,
-                  var IsReplayOwner: Boolean,
-                  var HasFinishedLoading: Boolean?,
-                  var HasStartedPlaying: Boolean?,
-                  var HasThankedBusDriver: Boolean?, // either true or null
-                  var Placement: Int?,
-                  var Kills: Int?,
-                  var TeamKills: Int?,
-                  var DeathCause: Int?,
-                  var DeathTags: List<String>?,
-                  var DeathLocation: Map<String, Double>?)
+@Serializable
+data class Player(val Id: Int,
+                  val PlayerId: String?,
+                  val EpicId: String?,
+                  val BotId: String?,
+                  val IsBot: Boolean?, // either true or null
+                  val PlayerNameCustomOverride: String?, // only henchman
+                  val Platform: String?,
+                  val Level: Int?,
+                  val SeasonLevelUIDisplay: Int?,
+                  val TeamIndex: Int,
+                  val IsPartyLeader: Boolean,
+                  val IsReplayOwner: Boolean,
+                  val HasFinishedLoading: Boolean?,
+                  val HasStartedPlaying: Boolean?,
+                  val HasThankedBusDriver: Boolean?, // either true or null
+                  val Placement: Int?,
+                  val Kills: Int?,
+                  val TeamKills: Int?,
+                  val DeathCause: Int?,
+                  val DeathTags: List<String>?,
+                  val DeathLocation: Map<String, Double>?)
 
-data class KillFeedEntry(var PlayerId: Int,
-                         var PlayerName: String?,
-                         var PlayerIsBot: Boolean,
-                         var FinisherOrDowner: Int?,
-                         var FinisherOrDownerName: String,
-                         var FinisherOrDownerIsBot: Boolean,
-                         var ReplicatedWorldTimeSeconds: Double,
-                         var Distance: Double,
-                         var DeathCause: Int,
-                         var DeathLocation: Map<String, Double>,
-                         var DeathTags: List<String>,
-                         var IsDowned: Boolean,
-                         var IsRevived: Boolean)
+@Serializable
+data class KillFeedEntry(val PlayerId: Int,
+                         val PlayerName: String?,
+                         val PlayerIsBot: Boolean,
+                         val FinisherOrDowner: Int?,
+                         val FinisherOrDownerName: String?,
+                         val FinisherOrDownerIsBot: Boolean,
+                         val ReplicatedWorldTimeSeconds: Double,
+                         val Distance: Double?,
+                         val DeathCause: Int?,
+                         val DeathLocation: Map<String, Double>,
+                         val DeathTags: List<String>?,
+                         val IsDowned: Boolean,
+                         val IsRevived: Boolean)
 
-data class Replay(var Eliminations: List<Elimination>,
-                  var Stats: GameStats,
-                  var TeamStats: TeamStats,
-                  var GameData: GameData,
-                  var TeamData: List<Team>,
-                  var PlayerData: List<Player>,
-                  var KillFeed: List<KillFeedEntry>) {
+@Serializable
+data class Replay(val Eliminations: List<Elimination>,
+                  val Stats: GameStats,
+                  val TeamStats: TeamStats,
+                  val GameData: GameData,
+                  val TeamData: List<Team>,
+                  val PlayerData: List<Player>,
+                  val KillFeed: List<KillFeedEntry>) {
 
     fun getPlayer(id: Int): Player? {
         for (playerDatum in PlayerData) {
@@ -90,6 +102,10 @@ data class Replay(var Eliminations: List<Elimination>,
             }
         }
         return null
+    }
+
+    companion object {
+        fun fromJson(str: String) = Json(JsonConfiguration(ignoreUnknownKeys = true, isLenient = true)).parse(serializer(), str)
     }
 
 }

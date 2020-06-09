@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform") version "1.3.72"
     maven
     NativeBuilder
+    kotlin("plugin.serialization") version "1.3.72"
 }
 
 group = "me.tgsc"
@@ -21,6 +22,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.20.0")
             }
         }
         val jvmMain by getting {
@@ -29,12 +31,13 @@ kotlin {
                 implementation("org.apache.commons:commons-exec:1.3")
                 implementation("org.apache.commons:commons-lang3:3.9")
                 implementation("commons-io:commons-io:2.6")
-                implementation("com.google.code.gson:gson:2.8.6")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
             }
         }
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0")
             }
         }
     }

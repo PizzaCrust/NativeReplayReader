@@ -40,7 +40,7 @@ class TeamImpl(private val obj: Team, private val r: Replay): RTeam {
     override val partyOwner: RPlayer?
         get() {
             if (obj.PartyOwnerId != null) {
-                return r.playerFromId(obj.PartyOwnerId!!)!!
+                return r.playerFromId(obj.PartyOwnerId)!!
             }
             return null
         }

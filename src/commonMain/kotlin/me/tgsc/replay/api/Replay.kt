@@ -110,7 +110,7 @@ interface Replay {
     /**
      * When the first zone starts
      */
-    val safeZoneStartTime: Double
+    val safeZoneStartTime: Double?
 
     /**
      * Represents the replay owner

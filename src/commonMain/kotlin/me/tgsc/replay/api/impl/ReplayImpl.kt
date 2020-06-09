@@ -103,7 +103,7 @@ private open class ReplayImpl(private val h: Replay): me.tgsc.replay.api.Replay 
         get() = h.GameData.TournamentRound
     override val busStartTime: Double
         get() = h.GameData.AircraftStartTime
-    override val safeZoneStartTime: Double
+    override val safeZoneStartTime: Double?
         get() = h.GameData.SafeZoneStartTime
     override val replayOwner: RHumanPlayer
         get() {
