@@ -1,1 +1,1 @@
-rootProject.name = "NativeReplayReader"
+rootProject.name = "nativereplayreader"

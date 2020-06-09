@@ -1,6 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.3.72"
-    maven
+    `maven-publish`
     NativeBuilder
     kotlin("plugin.serialization") version "1.3.72"
 }
