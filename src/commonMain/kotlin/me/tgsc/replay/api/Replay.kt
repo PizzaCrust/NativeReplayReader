@@ -29,49 +29,21 @@ interface Replay {
      */
     val players: List<RPlayer>
 
-    fun playerFromId(int: Int): RPlayer? {
-        for (player in this.players) {
-            if (player.id == int) {
-                return player
-            }
-        }
-        return null
-    }
+    /**
+     * Represent bots faking as real players.
+     */
+    val botPlayers: List<RPlayerBot>
+        get() = players.mapNotNull { if (it is RPlayerBot) it else null }
 
-    fun playerFromStringId(str: String): RPlayer? {
-        val human = playerFromEpicId(str)
-        if (human != null) {
-            return human
-        }
-        for (player in this.players) {
-            if (player is RPlayerBot) {
-                if (player.botId == str) {
-                    return player
-                }
-            }
-        }
-        return null
-    }
+    fun playerFromId(int: Int): RPlayer? = players.firstOrNull { it.id == int}
 
-    fun playerFromEpicId(str: String): RHumanPlayer? {
-        for (player in this.players) {
-            if (player is RHumanPlayer) {
-                if (player.epicId == str) {
-                    return player
-                }
-            }
-        }
-        return null
-    }
+    fun playerFromBotId(str: String): RPlayerBot? = botPlayers.firstOrNull { it.botId == str }
 
-    fun teamFromId(int: Int): RTeam? {
-        for (team in this.teams) {
-            if (team.id == int) {
-                return team
-            }
-        }
-        return null
-    }
+    fun playerFromStringId(str: String): RPlayer? = playerFromEpicId(str) ?: playerFromBotId(str)
+
+    fun playerFromEpicId(str: String): RHumanPlayer? = humanPlayers.firstOrNull { it.epicId == str }
+
+    fun teamFromId(int: Int): RTeam? = teams.firstOrNull { it.id == int }
 
     /**
      * Represents human players

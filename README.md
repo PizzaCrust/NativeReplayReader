@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-js"))
+    implementation(kotlin("stdlib-jdk8"))
     implementation("com.github.PizzaCrust.NativeReplayReader:nativereplayreader-jvm:4297639511")
 }
 ```
