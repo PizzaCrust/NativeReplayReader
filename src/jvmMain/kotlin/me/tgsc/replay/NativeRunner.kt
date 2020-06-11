@@ -13,7 +13,7 @@ import kotlin.system.exitProcess
 
 fun main() {
     val runner = NativeRunner()
-    runner.processReplay(File("solo win.replay")) {
+    runner.processReplay(File("kartik_clutch.replay")) {
         println(this)
     }.future.get()
     exitProcess(0)
