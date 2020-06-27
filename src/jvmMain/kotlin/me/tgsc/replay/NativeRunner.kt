@@ -1,19 +1,16 @@
 package me.tgsc.replay
 
 import me.tgsc.replay.Replay.Companion.fromJson
-import org.apache.commons.exec.CommandLine
-import org.apache.commons.exec.DefaultExecutor
-import org.apache.commons.exec.PumpStreamHandler
-import java.io.ByteArrayOutputStream
+import java.io.BufferedReader
 import java.io.File
-import java.lang.UnsupportedOperationException
+import java.io.InputStreamReader
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import kotlin.system.exitProcess
 
 fun main() {
     val runner = NativeRunner()
-    runner.processReplay(File("kartik_clutch.replay")) {
+    runner.processReplay(File("season12.replay")) {
         println(this)
     }.future.get()
     exitProcess(0)
@@ -56,7 +53,7 @@ class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
         if (SupportedPlatform.currentPlatform == null) throw UnsupportedOperationException("Invalid os")
         client = extractFile(SupportedPlatform.currentPlatform)
         if (SupportedPlatform.currentPlatform != SupportedPlatform.WIN) {
-            DefaultExecutor().execute(CommandLine.parse("chmod 777 ${client.absolutePath}"))
+            exec("chmod 777 ${client.absolutePath}")
         }
     }
 
@@ -67,26 +64,31 @@ class NativeRunner: ReplayParser<File, NativeRunner.FutureTicket> {
             get() = future.isDone
     }
 
+    private fun exec(cmd: String): List<String> {
+        Runtime.getRuntime().exec(cmd).apply {
+            val lines = mutableListOf<String>()
+            threadPool.submit {
+                val reader = BufferedReader(InputStreamReader(this.inputStream))
+                while (true) {
+                    val line = reader.readLine() ?: break
+                    lines.add(line)
+                }
+            }
+            waitFor()
+            return lines
+        }
+    }
+
     override fun processReplay(inputResource: File, parseMode: ReplayParser.ParseMode, block: Replay.() -> Unit): FutureTicket {
         if (!inputResource.exists()) {
             throw UnsupportedOperationException("File doesn't exist")
         }
         return FutureTicket(threadPool.submit {
-            val cmd = "${client.absolutePath} \"${inputResource.absolutePath}\" ${parseMode.name}"
-            val out = ByteArrayOutputStream()
-            val exec = DefaultExecutor()
-            exec.streamHandler = PumpStreamHandler(out)
-            exec.execute(CommandLine.parse(cmd))
-            val str = out.toString()
-            val builder = StringBuilder()
-            str.lines().forEachIndexed { index, s ->
-                if (index == 0) {
-                    println(s)
-                } else {
-                    builder.append("$s\n")
-                }
-            }
-            block(fromJson(builder.toString()))
+            val cmd = "${client.absolutePath} \"${inputResource.absolutePath}\" ${parseMode
+                    .name}"
+            val lines = exec(cmd).toMutableList()
+            println(lines[0].also { lines.removeAt(0) })
+            block(fromJson(lines.joinToString("\n")))
         })
     }
 
