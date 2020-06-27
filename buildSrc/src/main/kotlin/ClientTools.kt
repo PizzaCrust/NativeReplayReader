@@ -16,7 +16,7 @@ private fun File.extractFrom(str: String) {
 }
 
 private fun File.build(runtime: String): File {
-    exec("dotnet publish -r $runtime -c Release /p:PublishSingleFile=true")
+    exec("dotnet publish -r $runtime -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true")
     return File(this, "bin/Release/netcoreapp3.1/$runtime/publish/")
 }
 
