@@ -7,7 +7,7 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
     override val handle: Any
         get() = this.handleObj
     override val id: Int
-        get() = handleObj.Id
+        get() = handleObj.Id ?: -1
     override val team: RTeam
         get() {
             for (team in r.teams) {
@@ -24,8 +24,8 @@ private open class PlayerImpl(protected val handleObj: Player, private val r: Re
     override val death: DeathInfo?
         get() {
             return if (handleObj.DeathCause != null) {
-                DeathInfo(handleObj.DeathCause, fromMapToLoc(handleObj.DeathLocation!!),
-                        handleObj.DeathTags!!)
+                DeathInfo(handleObj.DeathCause, fromVectorToLoc(handleObj.DeathLocation ?: return null),
+                        handleObj.DeathTags ?: return null)
             } else {
                 null
             }

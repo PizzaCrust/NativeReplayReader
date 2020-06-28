@@ -1,9 +1,11 @@
 package me.tgsc.replay.api
 
+import me.tgsc.replay.FVector
+
 data class Location(val x: Double, val y: Double, val z: Double)
 
-fun fromMapToLoc(map: Map<String, Double>): Location {
-    return Location(map["X"]!!, map["Y"]!!, map["Z"]!!)
+fun fromVectorToLoc(map: FVector): Location {
+    return Location(map.X.toDouble(), map.Y.toDouble(), map.Z.toDouble())
 }
 
 data class DeathInfo(val cause: Int, val location: Location, val tags: List<String>)

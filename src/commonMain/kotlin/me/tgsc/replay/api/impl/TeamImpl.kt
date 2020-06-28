@@ -1,13 +1,13 @@
 package me.tgsc.replay.api.impl
 
-import me.tgsc.replay.Team
+import me.tgsc.replay.TeamData
 import me.tgsc.replay.api.*
 
-class TeamImpl(private val obj: Team, private val r: Replay): RTeam {
+class TeamImpl(private val obj: TeamData, private val r: Replay): RTeam {
     override val handle: Any
         get() = obj
     override val id: Int
-        get() = obj.TeamIndex
+        get() = obj.TeamIndex ?: -1
     override val botTeam: Boolean
         get() {
             var bots = false
@@ -22,6 +22,7 @@ class TeamImpl(private val obj: Team, private val r: Replay): RTeam {
         get() {
             val players = mutableListOf<RPlayer>()
             for (playerId in obj.PlayerIds) {
+                playerId ?: continue
                 val plHandle = r.playerFromId(playerId)!!
                 players.add(plHandle)
             }

@@ -24,7 +24,7 @@ private open class ReplayImpl(private val h: Replay): me.tgsc.replay.api.Replay 
             return sess
         }
     override val matchStartedTimestamp: String
-        get() = h.GameData.UtcTimeStartedMatch
+        get() = h.GameData.UtcTimeStartedMatch ?: ""
     override val teams: List<RTeam>
         get() {
             val teams = mutableListOf<RTeam>()
@@ -81,7 +81,7 @@ private open class ReplayImpl(private val h: Replay): me.tgsc.replay.api.Replay 
                         Elimination(
                                 playerFromStringId(elimination.Eliminator.toLowerCase())!!,
                                 playerFromStringId(elimination.Eliminated.toLowerCase())!!,
-                                elimination.GunType,
+                                elimination.GunType.toInt(),
                                 elimination.Knocked,
                                 convertTimeString(elimination.Time)
                         )
@@ -102,9 +102,9 @@ private open class ReplayImpl(private val h: Replay): me.tgsc.replay.api.Replay 
     override val tournamentRound: Int?
         get() = h.GameData.TournamentRound
     override val busStartTime: Double
-        get() = h.GameData.AircraftStartTime
+        get() = h.GameData.AircraftStartTime?.toDouble() ?: 0.0
     override val safeZoneStartTime: Double?
-        get() = h.GameData.SafeZoneStartTime
+        get() = h.GameData.SafeZonesStartTime?.toDouble()
     override val replayOwner: RHumanPlayer
         get() {
             for (player in this.players) {
