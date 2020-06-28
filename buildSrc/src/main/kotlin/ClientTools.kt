@@ -57,6 +57,12 @@ fun build(root: File) {
     println("Building FortniteReplayDecompressor")
     File(tmp, "FortniteReplayDecompressor/src/FortniteReplayReader").extractFrom("FRR.csproj")
     File(tmp, "FortniteReplayDecompressor/src/FortniteReplayReader").exec("dotnet build FRR.csproj")
+    println("Transpiling models to kotlin")
+    val frrModels = File(tmp, "FortniteReplayDecompressor/src/FortniteReplayReader/Models")
+    val unrealCoreModels = File(tmp, "FortniteReplayDecompressor/src/Unreal.Core/Models")
+    File(root, "ReplayModel.kt").writeText(generateKotlinDirSrc(listOf(frrModels, unrealCoreModels)).replace
+    ("ActorGuid",
+            "NetworkGUID"))
     println("Extracting client")
     val replayClient = File(tmp, "ReplayClient")
     replayClient.mkdir()
