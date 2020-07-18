@@ -9,7 +9,8 @@ import kotlinx.serialization.json.JsonConfiguration
 @Serializable data class Stats(val Unknown: Int, val Eliminations: Int, val Accuracy: Float, val Assists: Int, val WeaponDamage: Int, val OtherDamage: Int, val DamageToPlayers: Int, val Revives: Int, val DamageTaken: Int, val DamageToStructures: Int, val MaterialsGathered: Int, val MaterialsUsed: Int, val TotalTraveled: Int)
 @Serializable data class TeamStats(val Unknown: Int, val Position: Int, val TotalPlayers: Int)
 @Serializable data class Replay(val Eliminations: List<PlayerElimination>, val Stats:
-Stats, val TeamStats: TeamStats, val GameData: GameData, val TeamData: List<TeamData>, val PlayerData: List<Player>, val KillFeed: List<KillFeedEntry>, val MapData: MapData) {
+Stats, val TeamStats: TeamStats?, val GameData: GameData, val TeamData: List<TeamData>, val
+PlayerData: List<Player>, val KillFeed: List<KillFeedEntry>, val MapData: MapData) {
     fun getPlayer(id: Int): Player? {
         for (playerDatum in PlayerData) {
             if (playerDatum.Id == id) {
@@ -24,12 +25,14 @@ Stats, val TeamStats: TeamStats, val GameData: GameData, val TeamData: List<Team
     }
 }
 @Serializable data class GameData(val GameSessionId: String, val UtcTimeStartedMatch: String?,
-                                  val CurrentPlaylist: String, val AdditionalPlaylistLevels: List<String>, val ActiveGameplayModifiers: List<String>, val MaxPlayers: Int?, val TotalTeams: Int?, val TotalBots: Int?, val TeamSize: Int?, val TotalPlayerStructures: Int?, val IsTournamentRound: Boolean, val TournamentRound: Int?, val IsLargeTeamGame: Boolean?, val AircraftStartTime: Float?, val SafeZonesStartTime: Float?, val WinningTeam: Int?, val WinningPlayerIds: List<Int>)
+                                  val CurrentPlaylist: String, val AdditionalPlaylistLevels:
+                                  List<String>, val ActiveGameplayModifiers: List<String>, val MaxPlayers: Int?, val TotalTeams: Int?, val TotalBots: Int?, val TeamSize: Int?, val TotalPlayerStructures: Int?, val IsTournamentRound: Boolean, val TournamentRound: Int?, val IsLargeTeamGame: Boolean?, val AircraftStartTime: Float?, val SafeZonesStartTime: Float?, val WinningTeam: Int?, val WinningPlayerIds: List<Int>?)
 @Serializable data class InventoryItem(val Count: Int?, val ItemDefinition: String, val OrderIndex: Short?, val Durability: Float?, val Level: Int?, val LoadedAmmo: Int?, val A: Int?, val B: Int?, val C: Int?, val D: Int?)
 @Serializable data class KillFeedEntry(val PlayerId: Int?, val PlayerName: String?, val
 PlayerIsBot: Boolean, val FinisherOrDowner: Int?, val FinisherOrDownerName: String?, val
 FinisherOrDownerIsBot: Boolean, val ReplicatedWorldTimeSeconds: Float?, val Distance: Float?, val
-DeathCause: Int?, val DeathLocation: FVector, val DeathCircumstance: Int?, val DeathTags: List<String>?, val IsDowned: Boolean, val IsRevived: Boolean)
+DeathCause: Int?, val DeathLocation: FVector?, val DeathCircumstance: Int?, val DeathTags:
+List<String>?, val IsDowned: Boolean, val IsRevived: Boolean)
 @Serializable data class Llama(val Id: Int, val Location: FVector, val HasSpawnedPickups: Boolean, val Looted: Boolean, val LootedTime: Float?, val LandingLocation: FVector)
 @Serializable data class MapData(val BattleBusFlightPaths: List<BattleBus>, val SafeZones:
 List<SafeZone>, val Llamas: List<Llama>, val SupplyDrops: List<SupplyDrop>, val RebootVans:
